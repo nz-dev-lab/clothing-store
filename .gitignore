@@ -30,7 +30,6 @@ Thumbs.db
 .vscode/
 *.swp
 
-# Node (if you add a build step for JS/CSS)
+# Node — dependencies are never committed; built output (assets/js/) IS committed
 node_modules/
-dist/
 .cache/

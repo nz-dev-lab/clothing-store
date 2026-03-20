@@ -20,14 +20,14 @@ services:
       retries: 5
 
   wordpress:
-    image: wordpress:6.5-php8.2-apache
+    image: wordpress:6.8-php8.2-apache
     container_name: clothing_wp
     restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
     ports:
-      - "8080:80"
+      - "3010:80"
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE:-wordpress}
@@ -40,6 +40,8 @@ services:
         define('SCRIPT_DEBUG', true);
         define('WP_MEMORY_LIMIT', '256M');
     volumes:
+      # Shared WP core volume — wpcli reads from here
+      - wp_root:/var/www/html
       # Your custom theme and plugin are mounted live — edit locally, reflects instantly
       - ./wp-content/themes/clothing-store-child:/var/www/html/wp-content/themes/clothing-store-child
       - ./wp-content/plugins/clothing-store-custom:/var/www/html/wp-content/plugins/clothing-store-custom
@@ -58,7 +60,7 @@ services:
     depends_on:
       - db
     ports:
-      - "8081:80"
+      - "3011:80"
     environment:
       PMA_HOST: db
       PMA_USER: ${MYSQL_USER:-wpuser}
@@ -79,6 +81,7 @@ services:
       WORDPRESS_DB_USER: ${MYSQL_USER:-wpuser}
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-wppass}
     volumes:
+      - wp_root:/var/www/html
       - ./wp-content/themes/clothing-store-child:/var/www/html/wp-content/themes/clothing-store-child
       - ./wp-content/plugins/clothing-store-custom:/var/www/html/wp-content/plugins/clothing-store-custom
       - wp_uploads:/var/www/html/wp-content/uploads
@@ -90,6 +93,7 @@ services:
 
 volumes:
   db_data:
+  wp_root:
   wp_uploads:
   wp_plugins:
   wp_themes:

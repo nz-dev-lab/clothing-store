@@ -35,7 +35,7 @@ add_action( 'wp_enqueue_scripts', function () {
 
 $includes = [
     // 'inc/woocommerce.php',
-    // 'inc/bulk-order.php',
+    'inc/bulk-order.php',
 ];
 
 foreach ( $includes as $file ) {

@@ -1,0 +1,70 @@
+name: Deploy
+
+# Triggers when a commit is pushed to main (i.e. development → main PR is merged).
+# This is the production deployment pipeline — only run when hosting is ready.
+#
+# Required secrets (add in GitHub → Settings → Secrets):
+#   CLOUDWAYS_SSH_HOST   — server IP from Cloudways dashboard
+#   CLOUDWAYS_SSH_USER   — SSH user (usually "master")
+#   CLOUDWAYS_SSH_KEY    — private SSH key (add public key to Cloudways)
+#   CLOUDWAYS_WP_PATH    — absolute path to WP root on server
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Deploy to Cloudways
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # ── Build JS bundle ───────────────────────────────────────────────────
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: wp-content/themes/clothing-store-child/package-lock.json
+
+      - name: Build React bundle
+        run: |
+          npm ci
+          npm run build
+        working-directory: wp-content/themes/clothing-store-child
+
+      # ── Deploy via rsync ──────────────────────────────────────────────────
+      # TODO: uncomment when Cloudways server is provisioned
+      #
+      # - name: Add SSH key
+      #   uses: webfactory/ssh-agent@v0.9.0
+      #   with:
+      #     ssh-private-key: ${{ secrets.CLOUDWAYS_SSH_KEY }}
+      #
+      # - name: Deploy custom theme
+      #   run: |
+      #     rsync -avz --delete \
+      #       --exclude='node_modules' \
+      #       --exclude='src' \
+      #       --exclude='*.ts' \
+      #       --exclude='*.tsx' \
+      #       --exclude='vite.config.*' \
+      #       --exclude='package*.json' \
+      #       wp-content/themes/clothing-store-child/ \
+      #       ${{ secrets.CLOUDWAYS_SSH_USER }}@${{ secrets.CLOUDWAYS_SSH_HOST }}:${{ secrets.CLOUDWAYS_WP_PATH }}/wp-content/themes/clothing-store-child/
+      #
+      # - name: Deploy custom plugin
+      #   run: |
+      #     rsync -avz --delete \
+      #       wp-content/plugins/clothing-store-custom/ \
+      #       ${{ secrets.CLOUDWAYS_SSH_USER }}@${{ secrets.CLOUDWAYS_SSH_HOST }}:${{ secrets.CLOUDWAYS_WP_PATH }}/wp-content/plugins/clothing-store-custom/
+      #
+      # - name: Flush cache
+      #   run: |
+      #     ssh ${{ secrets.CLOUDWAYS_SSH_USER }}@${{ secrets.CLOUDWAYS_SSH_HOST }} \
+      #       "wp cache flush --path=${{ secrets.CLOUDWAYS_WP_PATH }} --allow-root"
+
+      - name: Deployment pending
+        run: echo "Hosting not yet provisioned. Uncomment deploy steps once Cloudways server is ready."

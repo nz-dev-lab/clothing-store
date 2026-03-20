@@ -45,11 +45,15 @@ $WP plugin install woo-discount-rules --activate
 
 echo ""
 echo "==> Installing bundles plugin..."
-$WP plugin install wpc-product-bundles --activate
+$WP plugin install woo-product-bundle --activate
 
 echo ""
 echo "==> Installing min/max quantities plugin..."
-$WP plugin install woocommerce-min-max-quantities --activate
+$WP plugin install minmax-quantity-for-woocommerce --activate
+
+echo ""
+echo "==> Installing weight-based shipping plugin..."
+$WP plugin install weight-based-shipping-for-woocommerce --activate
 
 echo ""
 echo "==> Installing WooCommerce REST API helper..."
@@ -88,5 +92,5 @@ echo " Setup complete!"
 echo " WP Admin: ${WP_SITEURL}/wp-admin"
 echo " Username: ${WP_ADMIN_USER}"
 echo " Password: ${WP_ADMIN_PASSWORD}"
-echo " phpMyAdmin: http://localhost:8081"
+echo " phpMyAdmin: http://localhost:3011"
 echo "============================================"
