@@ -1,0 +1,36 @@
+# Environment — never commit real credentials
+.env
+
+# WordPress core — not versioned, pulled via Docker image
+wp-admin/
+wp-includes/
+wp-*.php
+xmlrpc.php
+index.php
+license.txt
+readme.html
+
+# Uploaded media — not versioned
+wp-content/uploads/
+
+# Third-party plugins and themes — installed via WP-CLI scripts, not committed
+wp-content/plugins/*
+!wp-content/plugins/clothing-store-custom/
+
+wp-content/themes/*
+!wp-content/themes/clothing-store-child/
+
+# WooCommerce logs
+wp-content/uploads/wc-logs/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Node (if you add a build step for JS/CSS)
+node_modules/
+dist/
+.cache/

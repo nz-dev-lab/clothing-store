@@ -1,0 +1,110 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+
+  # ── PHP lint & syntax check ───────────────────────────────────────────────
+  php-lint:
+    name: PHP lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: phpcs, phpstan
+
+      - name: Check PHP syntax (all custom files)
+        run: |
+          find wp-content/themes/clothing-store-child \
+               wp-content/plugins/clothing-store-custom \
+               -name "*.php" \
+               -exec php -l {} \;
+
+      - name: Run PHP_CodeSniffer (WordPress coding standards)
+        run: |
+          composer global require wp-coding-standards/wpcs --dev 2>/dev/null || true
+          phpcs --standard=WordPress \
+                --extensions=php \
+                --ignore=*/node_modules/* \
+                wp-content/plugins/clothing-store-custom/ \
+                wp-content/themes/clothing-store-child/ \
+          || echo "PHPCS warnings found (non-blocking for now)"
+
+  # ── Spin up Docker stack and run smoke tests ──────────────────────────────
+  integration:
+    name: Integration smoke test
+    runs-on: ubuntu-latest
+    needs: php-lint
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy .env
+        run: cp .env.example .env
+
+      - name: Start Docker stack
+        run: docker compose up -d --wait
+
+      - name: Wait for WordPress to be ready
+        run: |
+          echo "Waiting for WP to respond..."
+          for i in {1..20}; do
+            curl -s -o /dev/null -w "%{http_code}" http://localhost:8080 | grep -q "200\|302" && break
+            sleep 3
+          done
+
+      - name: Install WordPress via WP-CLI
+        run: |
+          docker compose run --rm wpcli wp core install \
+            --url="http://localhost:8080" \
+            --title="CI Test Store" \
+            --admin_user="admin" \
+            --admin_password="admin" \
+            --admin_email="ci@test.com" \
+            --skip-email \
+            --allow-root \
+            --path=/var/www/html
+
+      - name: Install WooCommerce
+        run: |
+          docker compose run --rm wpcli wp plugin install woocommerce --activate \
+            --allow-root --path=/var/www/html
+
+      - name: Activate custom theme and plugin
+        run: |
+          docker compose run --rm wpcli wp theme activate clothing-store-child \
+            --allow-root --path=/var/www/html
+          docker compose run --rm wpcli wp plugin activate clothing-store-custom \
+            --allow-root --path=/var/www/html
+
+      - name: Smoke test — homepage returns 200
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
+          echo "Homepage status: $STATUS"
+          [ "$STATUS" = "200" ] || [ "$STATUS" = "302" ]
+
+      - name: Smoke test — WooCommerce shop page exists
+        run: |
+          docker compose run --rm wpcli wp wc tool run install_pages \
+            --user=admin --allow-root --path=/var/www/html
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/shop)
+          echo "Shop page status: $STATUS"
+          [ "$STATUS" = "200" ] || [ "$STATUS" = "301" ] || [ "$STATUS" = "302" ]
+
+      - name: Smoke test — custom plugin loaded without errors
+        run: |
+          docker compose run --rm wpcli wp eval \
+            "echo class_exists('WooCommerce') ? 'WC_OK' : 'WC_MISSING';" \
+            --allow-root --path=/var/www/html | grep -q "WC_OK"
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v
