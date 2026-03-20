@@ -34,7 +34,7 @@ add_action( 'wp_enqueue_scripts', function () {
 //   inc/ajax.php          — AJAX handlers
 
 $includes = [
-    // 'inc/woocommerce.php',
+    'inc/woocommerce.php',
     'inc/bulk-order.php',
 ];
 

@@ -13,3 +13,34 @@ Text Domain:  clothing-store-child
   Astra's styles load first, then these override them.
   Keep this file for overrides only — component styles go in assets/css/
 */
+
+/* ── Shipping estimator (product page) ──────────────────────────────────── */
+.cs-shipping-estimator {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 12px 0;
+    padding: 12px 16px;
+    background: #f0f7ff;
+    border: 1px solid #cce0ff;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.cs-shipping-estimator__icon {
+    flex-shrink: 0;
+    color: #2563eb;
+    margin-top: 2px;
+}
+
+.cs-shipping-estimator__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cs-shipping-estimator__detail {
+    color: #555;
+    font-size: 13px;
+}
