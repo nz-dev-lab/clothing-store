@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 58" width="230" height="58">
+
+  <!-- Monogram box -->
+  <rect x="1" y="1" width="50" height="56" fill="none" stroke="#E8E0D5" stroke-width="0.75" opacity="0.45"/>
+  <line x1="8" y1="9"  x2="43" y2="9"  stroke="#E8E0D5" stroke-width="0.5" opacity="0.25"/>
+  <line x1="8" y1="49" x2="43" y2="49" stroke="#E8E0D5" stroke-width="0.5" opacity="0.25"/>
+  <text x="26" y="38"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="28" font-weight="400"
+    fill="#E8E0D5" letter-spacing="3">HF</text>
+
+  <!-- Vertical divider + diamond accent -->
+  <line x1="65" y1="10" x2="65" y2="48" stroke="#E8E0D5" stroke-width="0.5" opacity="0.3"/>
+  <polygon points="65,29 68,26 71,29 68,32" fill="#E8E0D5" opacity="0.45"/>
+
+  <!-- HIRA -->
+  <text x="80" y="29"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="20" font-weight="400"
+    fill="#E8E0D5" letter-spacing="6">HIRA</text>
+
+  <!-- Rule between HIRA and FASHIONS -->
+  <line x1="80" y1="35" x2="228" y2="35" stroke="#E8E0D5" stroke-width="0.4" opacity="0.2"/>
+
+  <!-- FASHIONS -->
+  <text x="80" y="48"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="10" fill="#E8E0D5" letter-spacing="7" opacity="0.85">FASHIONS</text>
+
+</svg>

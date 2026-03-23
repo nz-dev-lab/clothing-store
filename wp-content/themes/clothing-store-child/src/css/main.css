@@ -1,0 +1,315 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Option B: Override Astra's CSS custom properties.
+ *
+ * Astra reads ALL its colors from --ast-global-color-0 through -7.
+ * Overriding them in :root cascades through buttons, links, nav, headings,
+ * WooCommerce, inputs — everywhere — with no !important required.
+ *
+ * Mapping:
+ *   0 = primary (links, buttons, focus rings)
+ *   1 = primary hover
+ *   2 = headings, site title
+ *   3 = body text
+ *   4 = primary alias (--ast-global-color-primary points to this)
+ *   5 = subtle/secondary background
+ *   6 = alternate background
+ *   7 = more subtle background variant
+ */
+@layer base {
+  :root {
+    --ast-global-color-0: #0A4A2F;   /* links, buttons, focus rings — logo green */
+    --ast-global-color-1: #083D26;   /* hover — darker green */
+    --ast-global-color-2: #1C1C1C;   /* headings */
+    --ast-global-color-3: #1C1C1C;   /* body text */
+    --ast-global-color-4: #FDF8F3;   /* surface / page background */
+    --ast-global-color-5: #F5F0E8;   /* subtle warm secondary bg */
+    --ast-global-color-6: #FDF8F3;   /* alternate background */
+    --ast-global-color-7: #E8DDD5;   /* subtle border / separator */
+    --ast-border-color:   #E8DDD5;   /* warm border for cards */
+  }
+
+  /* Page background */
+  body {
+    background-color: #FDF8F3;
+  }
+
+  /*
+   * Fonts — Astra sets these via direct selectors (not CSS variables),
+   * so we override with matching selectors. Our stylesheet loads after
+   * Astra's so same-specificity = last declaration wins. No !important needed.
+   */
+  body,
+  button, input, select, textarea,
+  .ast-button, .ast-custom-button {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  .site-title, .site-title a,
+  .entry-title, .entry-title a,
+  .woocommerce-loop-product__title,
+  .product_title,
+  .widget-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+/*
+ * Deep warm charcoal header — modern, not bright, works with any logo.
+ * Nav links warm cream, hover gold. All unlayered so they beat Astra by source order.
+ */
+.ast-primary-header-bar {
+  background-color: #1C1917;
+}
+
+.ast-primary-header-bar .site-title a {
+  color: #E8E0D5;
+}
+
+/* 3-class specificity — beats Astra's .ast-builder-menu-1 .menu-item > .menu-link */
+.ast-primary-header-bar .menu-item > .menu-link,
+.ast-primary-header-bar .main-header-menu .menu-link {
+  color: #E8E0D5;
+}
+
+.ast-primary-header-bar .menu-item:hover > .menu-link,
+.ast-primary-header-bar .current-menu-item > .menu-link {
+  color: #C9973A;
+}
+
+/* ── Logo + hide text site title ─────────────────────────────────────────── */
+/* Hide the text site title — logo image replaces it */
+.ast-site-identity .site-title,
+.ast-site-identity .site-description {
+  display: none !important;
+}
+.custom-logo-link img,
+.custom-logo {
+  width: 210px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 921px) {
+  .custom-logo-link img,
+  .custom-logo {
+    width: 170px;
+  }
+}
+
+@media (max-width: 544px) {
+  .custom-logo-link img,
+  .custom-logo {
+    width: 140px;
+  }
+}
+
+/* ── Shop page — product card layout ─────────────────────────────────────── */
+/*
+ * Colors are handled by the CSS variables above.
+ * These rules handle structural layout only: card shape, image ratio, spacing.
+ * Astra doesn't use CSS vars for layout — these selectors are still needed.
+ */
+@layer components {
+  .woocommerce ul.products li.product,
+  .woocommerce-page ul.products li.product {
+    background-color: #ffffff;
+    border: 1px solid #E8DDD5;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    padding: 0;
+    transition: box-shadow 0.3s ease, transform 0.25s ease;
+  }
+
+  .woocommerce ul.products li.product:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+
+  .woocommerce ul.products li.product a img {
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 3 / 4;
+    display: block;
+    margin: 0;
+    transition: transform 0.5s ease;
+  }
+
+  .woocommerce ul.products li.product:hover a img {
+    transform: scale(1.03);
+  }
+
+  /* Summary wrapper — owns all horizontal spacing so children align consistently */
+  .woocommerce ul.products li.product .astra-shop-summary-wrap {
+    padding: 0.75rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .woocommerce ul.products li.product .woocommerce-loop-product__title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0 0 0.2rem;
+    padding: 0;
+    color: #1C1C1C;
+  }
+
+  .woocommerce ul.products li.product .price {
+    display: block;
+    padding: 0;
+    margin-bottom: 0.75rem;
+    font-size: 0.975rem;
+    font-weight: 600;
+  }
+
+  /* Button fills the padded wrapper — no width calculation needed */
+  .woocommerce ul.products li.product .button {
+    display: block;
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    border-radius: 0.375rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    padding: 0.6rem 1rem;
+    box-sizing: border-box;
+  }
+
+  /* Hide redundant category label */
+  .woocommerce ul.products li.product .ast-woo-product-category,
+  .woocommerce ul.products li.product .woocommerce-loop-category__title {
+    display: none;
+  }
+}
+
+/* ── Single product page ─────────────────────────────────────────────────── */
+@layer components {
+  .woocommerce div.product .product_title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 2.25rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  /* Category badge */
+  .woocommerce div.product .posted_in a {
+    background-color: rgba(10, 74, 47, 0.10);
+    color: #0A4A2F;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.2rem 0.75rem;
+    border-radius: 999px;
+    text-decoration: none;
+  }
+
+  /* Gallery rounded corners */
+  .woocommerce div.product .woocommerce-product-gallery {
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  /* Breadcrumb */
+  .woocommerce .woocommerce-breadcrumb,
+  .woocommerce .woocommerce-breadcrumb a {
+    color: #6B6560;
+    font-size: 0.875rem;
+  }
+}
+
+/* ── Shipping estimator ──────────────────────────────────────────────────── */
+@layer components {
+  .cs-shipping-estimator {
+    @apply flex items-start gap-3 my-4 px-4 py-3 rounded-xl text-sm;
+    background-color: rgba(10, 74, 47, 0.05);
+    border: 1px solid rgba(10, 74, 47, 0.20);
+  }
+
+  .cs-shipping-estimator__icon {
+    flex-shrink: 0;
+    color: #0A4A2F;
+    margin-top: 2px;
+  }
+
+  .cs-shipping-estimator__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cs-shipping-estimator__detail {
+    color: #6B6560;
+    font-size: 0.8125rem;
+  }
+}
+
+/* ── Cart & Checkout ─────────────────────────────────────────────────────── */
+@layer components {
+  .woocommerce table.shop_table {
+    border: 1px solid #E8DDD5;
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
+  .woocommerce table.shop_table th {
+    background-color: #FDF8F3;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+    color: #6B6560;
+  }
+
+  .woocommerce-cart .cart_totals,
+  .woocommerce-checkout #payment {
+    border: 1px solid #E8DDD5;
+    border-radius: 1rem;
+  }
+
+  /* Form inputs */
+  .woocommerce form .form-row input.input-text,
+  .woocommerce form .form-row textarea {
+    border-color: #E8DDD5;
+    border-radius: 0.5rem;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  .woocommerce-checkout .woocommerce-billing-fields h3,
+  .woocommerce-checkout .woocommerce-shipping-fields h3,
+  .woocommerce-checkout #order_review_heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+}
+
+/* ── Bulk order table ────────────────────────────────────────────────────── */
+@layer components {
+  .cs-bulk-order { @apply max-w-4xl mx-auto px-4; }
+  .cs-bulk-order__heading { font-family: 'Cormorant Garamond', Georgia, serif; @apply text-3xl font-semibold mb-1; }
+  .cs-bulk-order__sub { @apply text-cs-muted text-sm mb-6; }
+  .cs-bulk-order__table { @apply w-full border-collapse mb-6; }
+  .cs-bulk-order__th { @apply py-3 px-2 border-b-2 border-cs-border text-xs font-semibold text-cs-muted uppercase tracking-wide text-center; }
+  .cs-bulk-order__td { @apply py-3 px-2 border-b border-cs-border text-center align-middle text-sm; }
+  .cs-bulk-order__img { @apply w-14 h-14 object-cover rounded-lg block; }
+  .cs-bulk-order__link { @apply text-cs-text font-medium no-underline hover:text-primary transition-colors text-left; }
+  .cs-bulk-order__qty { @apply w-16 px-2 py-1.5 border border-cs-border rounded-lg text-center text-sm focus:outline-none focus:border-primary transition-colors; }
+  .cs-bulk-order__summary { @apply max-w-xs ml-auto border-t-2 border-cs-border pt-4; }
+  .cs-bulk-order__summary-row { @apply flex justify-between mb-2 text-sm; }
+  .cs-bulk-order__summary-total { @apply font-bold text-base mt-2 pt-2 border-t border-cs-border; }
+  .cs-bulk-order__discount-hint { @apply text-xs text-accent mt-1 mb-3; }
+  .cs-bulk-order__btn { @apply w-full py-3 bg-primary text-white rounded-lg font-semibold text-sm mt-3 cursor-pointer border-0 hover:bg-primary-dark transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed; }
+  .cs-bulk-order__discount-line { @apply text-green-700; }
+  .cs-bulk-order__note { @apply mt-6 p-4 bg-cs-bg border border-cs-border rounded-xl text-xs text-cs-muted; }
+  .cs-bulk-order__error { @apply bg-red-50 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm; }
+}
