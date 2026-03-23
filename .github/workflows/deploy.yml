@@ -1,13 +1,13 @@
 name: Deploy
 
 # Triggers when a commit is pushed to main (i.e. development → main PR is merged).
-# This is the production deployment pipeline — only run when hosting is ready.
+# This is the production deployment pipeline.
 #
-# Required secrets (add in GitHub → Settings → Secrets):
-#   CLOUDWAYS_SSH_HOST   — server IP from Cloudways dashboard
-#   CLOUDWAYS_SSH_USER   — SSH user (usually "master")
-#   CLOUDWAYS_SSH_KEY    — private SSH key (add public key to Cloudways)
-#   CLOUDWAYS_WP_PATH    — absolute path to WP root on server
+# Required secrets (add in GitHub → Settings → Secrets → Actions):
+#   DO_SSH_KEY       — private SSH key (corresponding public key is on the server)
+#   DO_SSH_HOST      — 167.71.229.24
+#   DO_SSH_USER      — root
+#   DO_WP_PATH       — /var/www/html  (path inside the Docker container)
 
 on:
   push:
@@ -15,7 +15,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to Cloudways
+    name: Deploy to DigitalOcean
     runs-on: ubuntu-latest
 
     steps:
@@ -36,35 +36,35 @@ jobs:
         working-directory: wp-content/themes/clothing-store-child
 
       # ── Deploy via rsync ──────────────────────────────────────────────────
-      # TODO: uncomment when Cloudways server is provisioned
-      #
-      # - name: Add SSH key
-      #   uses: webfactory/ssh-agent@v0.9.0
-      #   with:
-      #     ssh-private-key: ${{ secrets.CLOUDWAYS_SSH_KEY }}
-      #
-      # - name: Deploy custom theme
-      #   run: |
-      #     rsync -avz --delete \
-      #       --exclude='node_modules' \
-      #       --exclude='src' \
-      #       --exclude='*.ts' \
-      #       --exclude='*.tsx' \
-      #       --exclude='vite.config.*' \
-      #       --exclude='package*.json' \
-      #       wp-content/themes/clothing-store-child/ \
-      #       ${{ secrets.CLOUDWAYS_SSH_USER }}@${{ secrets.CLOUDWAYS_SSH_HOST }}:${{ secrets.CLOUDWAYS_WP_PATH }}/wp-content/themes/clothing-store-child/
-      #
-      # - name: Deploy custom plugin
-      #   run: |
-      #     rsync -avz --delete \
-      #       wp-content/plugins/clothing-store-custom/ \
-      #       ${{ secrets.CLOUDWAYS_SSH_USER }}@${{ secrets.CLOUDWAYS_SSH_HOST }}:${{ secrets.CLOUDWAYS_WP_PATH }}/wp-content/plugins/clothing-store-custom/
-      #
-      # - name: Flush cache
-      #   run: |
-      #     ssh ${{ secrets.CLOUDWAYS_SSH_USER }}@${{ secrets.CLOUDWAYS_SSH_HOST }} \
-      #       "wp cache flush --path=${{ secrets.CLOUDWAYS_WP_PATH }} --allow-root"
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DO_SSH_KEY }}
 
-      - name: Deployment pending
-        run: echo "Hosting not yet provisioned. Uncomment deploy steps once Cloudways server is ready."
+      - name: Add server to known hosts
+        run: ssh-keyscan -H ${{ secrets.DO_SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy custom theme
+        run: |
+          rsync -avz --delete \
+            --exclude='node_modules' \
+            --exclude='src' \
+            --exclude='*.ts' \
+            --exclude='*.tsx' \
+            --exclude='tailwind.config.*' \
+            --exclude='postcss.config.*' \
+            --exclude='vite.config.*' \
+            --exclude='package*.json' \
+            wp-content/themes/clothing-store-child/ \
+            ${{ secrets.DO_SSH_USER }}@${{ secrets.DO_SSH_HOST }}:/opt/hira-fashions/wp-content/themes/clothing-store-child/
+
+      - name: Deploy custom plugin
+        run: |
+          rsync -avz --delete \
+            wp-content/plugins/clothing-store-custom/ \
+            ${{ secrets.DO_SSH_USER }}@${{ secrets.DO_SSH_HOST }}:/opt/hira-fashions/wp-content/plugins/clothing-store-custom/
+
+      - name: Flush cache
+        run: |
+          ssh ${{ secrets.DO_SSH_USER }}@${{ secrets.DO_SSH_HOST }} \
+            "docker exec hira_wp wp --allow-root --path=/var/www/html cache flush"
