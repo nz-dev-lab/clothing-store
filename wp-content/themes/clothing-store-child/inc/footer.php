@@ -23,10 +23,9 @@ add_action( 'astra_footer', function () {
 
             <div>
                 <p class="cs-footer__brand-name">Hira Fashions</p>
-                <p class="cs-footer__tagline">Finest Indian Wear</p>
+                <p class="cs-footer__tagline">Women's Fashion · Dubai, UAE</p>
                 <p style="margin-top:0.75rem; font-size:0.8rem; color:#6B6560; line-height:1.6;">
-                    Sourced from Dubai markets.<br>
-                    Shipped to India by air freight.
+                    Curated women's fashion,<br>delivered worldwide.
                 </p>
             </div>
 
@@ -48,8 +47,8 @@ add_action( 'astra_footer', function () {
                     WhatsApp Us
                 </a>
                 <p style="margin-top:0.6rem; font-size:0.8rem; color:#6B6560; line-height:1.6;">
-                    Delivery: 5–7 days to India<br>
-                    Air freight from Dubai
+                    Fast international delivery<br>
+                    from Dubai, UAE
                 </p>
             </div>
 

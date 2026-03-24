@@ -27,11 +27,11 @@ add_shortcode( 'hira_hero', function () {
     ob_start();
     ?>
     <section class="cs-hero">
-        <p class="cs-hero__eyebrow">Dubai · UAE &nbsp;|&nbsp; Finest Indian Wear</p>
-        <h1 class="cs-hero__title">Elegance Sourced<br>from Dubai Markets</h1>
+        <p class="cs-hero__eyebrow">Dubai · UAE</p>
+        <h1 class="cs-hero__title">Effortless Style,<br>Every Day</h1>
         <p class="cs-hero__sub">
-            Premium Indian ladies nightwear and ethnic wear — handpicked from Deira and Meena Bazaar,
-            shipped directly to your doorstep across India.
+            Thoughtfully curated women's fashion — from relaxed everyday wear
+            to elegant occasion pieces.
         </p>
         <div class="cs-hero__actions">
             <a href="/shop" class="cs-hero__btn-primary">Shop Collection</a>
