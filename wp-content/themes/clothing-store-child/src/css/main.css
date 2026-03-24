@@ -119,7 +119,7 @@
 @layer components {
   .woocommerce ul.products li.product,
   .woocommerce-page ul.products li.product {
-    background-color: #ffffff;
+    background-color: #FDFAF7;
     border: 1px solid #E8DDD5;
     border-radius: 0.75rem;
     overflow: hidden;
@@ -190,6 +190,19 @@
   .woocommerce ul.products li.product .woocommerce-loop-category__title {
     display: none;
   }
+
+  /* Add to Cart button — gold hover */
+  .woocommerce ul.products li.product .button:hover {
+    background-color: #C9973A;
+    border-color: #C9973A;
+    color: #ffffff;
+  }
+
+  /* Product image placeholder when no image */
+  .woocommerce ul.products li.product .attachment-woocommerce_thumbnail,
+  .woocommerce ul.products li.product img {
+    background-color: #F5F0E8;
+  }
 }
 
 /* ── Single product page ─────────────────────────────────────────────────── */
@@ -252,6 +265,205 @@
   }
 }
 
+/* ── Single product — attribute selectors ────────────────────────────────── */
+@layer components {
+  .woocommerce div.product .variations select,
+  .woocommerce div.product form.cart .variations select {
+    border: 1px solid #E8DDD5;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 0.9rem;
+    color: #1C1C1C;
+    background-color: #FDFAF7;
+    min-width: 160px;
+    cursor: pointer;
+  }
+
+  .woocommerce div.product .variations select:focus {
+    outline: none;
+    border-color: #0A4A2F;
+    box-shadow: 0 0 0 2px rgba(10, 74, 47, 0.12);
+  }
+
+  /* Sale badge — gold */
+  .woocommerce ul.products li.product .onsale,
+  .woocommerce span.onsale {
+    background-color: #C9973A;
+    border-radius: 0.375rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    min-width: unset;
+    min-height: unset;
+    padding: 0.25rem 0.6rem;
+    line-height: 1.4;
+  }
+}
+
+/* ── Homepage hero ────────────────────────────────────────────────────────── */
+@layer components {
+  .cs-hero {
+    background-color: #1C1917;
+    color: #E8E0D5;
+    text-align: center;
+    padding: 5rem 1.5rem 4rem;
+  }
+
+  .cs-hero__eyebrow {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #C9973A;
+    margin-bottom: 1rem;
+  }
+
+  .cs-hero__title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: #E8E0D5;
+    margin-bottom: 1.25rem;
+  }
+
+  .cs-hero__sub {
+    font-size: 1rem;
+    color: #A89E96;
+    max-width: 480px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+  }
+
+  .cs-hero__actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cs-hero__btn-primary {
+    background-color: #C9973A;
+    color: #ffffff;
+    padding: 0.75rem 2rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+
+  .cs-hero__btn-primary:hover {
+    background-color: #b5852e;
+    color: #ffffff;
+  }
+
+  .cs-hero__btn-secondary {
+    background-color: transparent;
+    color: #E8E0D5;
+    padding: 0.75rem 2rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    border: 1px solid rgba(232, 224, 213, 0.3);
+    transition: border-color 0.2s ease;
+  }
+
+  .cs-hero__btn-secondary:hover {
+    border-color: #E8E0D5;
+    color: #E8E0D5;
+  }
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+@layer components {
+  .cs-footer {
+    background-color: #1C1917;
+    color: #A89E96;
+    padding: 3rem 1.5rem 1.5rem;
+    margin-top: 4rem;
+    font-size: 0.875rem;
+  }
+
+  .cs-footer__grid {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .cs-footer__grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+
+  .cs-footer__brand-name {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.25rem;
+    color: #E8E0D5;
+    margin-bottom: 0.5rem;
+  }
+
+  .cs-footer__tagline {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6B6560;
+  }
+
+  .cs-footer__heading {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #E8E0D5;
+    margin-bottom: 0.75rem;
+  }
+
+  .cs-footer__link {
+    display: block;
+    color: #A89E96;
+    text-decoration: none;
+    margin-bottom: 0.4rem;
+    transition: color 0.2s;
+  }
+
+  .cs-footer__link:hover {
+    color: #C9973A;
+  }
+
+  .cs-footer__whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #C9973A;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .cs-footer__bottom {
+    max-width: 900px;
+    margin: 0 auto;
+    border-top: 1px solid rgba(232, 224, 213, 0.1);
+    padding-top: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: #6B6560;
+  }
+}
+
 /* ── Cart & Checkout ─────────────────────────────────────────────────────── */
 @layer components {
   .woocommerce table.shop_table {
@@ -309,7 +521,7 @@
   .cs-bulk-order__summary-total { @apply font-bold text-base mt-2 pt-2 border-t border-cs-border; }
   .cs-bulk-order__discount-hint { @apply text-xs text-accent mt-1 mb-3; }
   .cs-bulk-order__btn { @apply w-full py-3 bg-primary text-white rounded-lg font-semibold text-sm mt-3 cursor-pointer border-0 hover:bg-primary-dark transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed; }
-  .cs-bulk-order__discount-line { @apply text-green-700; }
+  .cs-bulk-order__discount-line { color: #0A4A2F; font-weight: 500; }
   .cs-bulk-order__note { @apply mt-6 p-4 bg-cs-bg border border-cs-border rounded-xl text-xs text-cs-muted; }
   .cs-bulk-order__error { @apply bg-red-50 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm; }
 }

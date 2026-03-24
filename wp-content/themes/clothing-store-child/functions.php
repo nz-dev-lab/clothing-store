@@ -55,6 +55,8 @@ add_action( 'wp_enqueue_scripts', function () {
 $includes = [
     'inc/woocommerce.php',
     'inc/bulk-order.php',
+    'inc/hero.php',
+    'inc/footer.php',
 ];
 
 foreach ( $includes as $file ) {
